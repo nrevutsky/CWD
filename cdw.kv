@@ -1,0 +1,150 @@
+<OpenWindow>:
+    GridLayout:
+        id: win
+        cols: 2
+        height: self.height
+        width: self.width
+        GridLayout:
+            id: GridMapOverview
+            rows: 3
+            ScatterPlane:
+                id: ScrLayot
+                do_rotation: False
+                height: self.height
+                width: self.width
+                AreaLevel:
+                    pos: root.x, root.y
+                    height: root.height*0.83
+                    width: root.width*0.712
+                    canvas.before:
+                        PushMatrix
+                        Translate:
+                            xy: 0,0
+                    canvas:
+                        Rectangle:
+                            id: lol
+                            texture: root.A_image.texture if root.A_image else None
+                            pos: self.pos
+                            size: self.width, self.height 
+                    canvas.after:
+                        PopMatrix 
+            Button:
+                background_color: [0,0.5,0.5,1]
+                id: 'next'
+                size_hint: 1, .1 
+                text: 'Band %i' %root.Band_num
+                
+            GridLayout:
+                cols: 2
+                size_hint: .2, .1
+                Button:
+                    background_color: [0,1,1,1]
+                    id: 'next'
+                    size_hint: 1, 1 
+                    text: 'PREVIOS BAND'
+                    on_press: root.previous()
+                Button:
+                    background_color: [0,1,1,1]
+                    id: 'next'
+                    size_hint: 1, 1 
+                    text: 'NEXT BAND'
+                    on_press: root.next()
+
+                    
+
+        GridLayout:
+            cols: 1
+            rows: 7
+            size_hint: .4, .5
+            id: Gridmenu
+            Button:
+                id: Open
+                text: 'Open'
+                font_size: 20
+                on_release: root.show_load()
+                background_color: [0,1,1,1]
+            Button:
+                id: Save
+                text: 'Save'
+                font_size: 20
+                on_release: root.show_save()
+                background_color: [0,1,1,1]
+            Button:
+                id: VI
+                text: 'NDVI'
+                font_size: 20
+                background_color: [0,1,1,1]
+                on_press: root.I_NDVI ()
+            Button:
+                id: VI1
+                text: 'IOR'
+                font_size: 20
+                background_color: [0,1,1,1]
+                on_press:root.I_IOR ()
+            Button:
+                id: Equal
+                text: 'Histogram Equalization'
+                font_size: 20 
+                background_color: [0,1,1,1]
+                on_press: root.Gistogram()
+            Button:
+                id: Composite
+                text: 'Make composite image'
+                font_size: 20 
+                background_color: [0,1,1,1]
+                on_press: root.Composite()
+            Button:
+                id: Pan
+                text: 'Pan sharpening '
+                font_size: 20 
+                background_color: [0,1,1,1]
+                on_press:root.PanSharp()
+            
+
+    
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Open"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Save"
+                on_release: root.save(filechooser.path, text_input.text)
+    
